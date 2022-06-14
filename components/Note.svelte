@@ -1,6 +1,21 @@
 <script>
     import ConfirmationModel from "./ConfirmationModel.svelte";
+    import Button from "./Button.svelte";
+    import store from "../store/noteStore";
+    import buttonConstants from "../constants/buttonConstants";
+    import constant from "../constants/constant";
+    import confirmationModelConstants from "../constants/confirmationModelConstants"
+
     export let color;
+    export let count;
+    export let id;
+
+    if(count == "5"){
+        count = constant.COLUMN_5
+    }
+    if(count == "2"){
+        count = constant.COLUMN_2
+    }
 
     let showDeleteModelFlag = false;
 
@@ -13,20 +28,34 @@
     }
 
     function deleteNote(){
-
+        console.log(id)
+        store.deleteItem("notes",id);
+        showDeleteModelFlag=false
     }
 </script>
 
 <style lang="scss">
-    .note{
+    .five{
+        width: calc((100% - (4*30px))/5);
         height: 24rem;
-        width: 15.875rem;
+        .content{
+            height: 75%;
+        }
+    }
+    .two{
+        width: calc((100% - 30px)/2);
+        height: 16rem;
+        .content{
+            height: 60%;
+        }
+    }
+    .note{
         .header{
             padding: 0 1rem;
         }
         .content{
             padding: 0 1rem;
-            height: 75%;
+            overflow: auto;
         }
         .footer{
             display: flex;
@@ -35,15 +64,15 @@
             padding: 0.5rem 1rem;
             
             ion-icon{
-                color: rgb(31,33,36);
+                color: #1f2124;
                 font-size: 18px;
+                cursor: pointer;
             }
         }
     }
     .green{
         background-color: #c2e89b; 
         .header{
-            
             background-color: #aed082;
         }
     }
@@ -68,7 +97,7 @@
 
 </style>
 
-<div class="note {color}">
+<div class="note {color} {count}">
     <div class="header">
         <slot name="header" />
     </div>
@@ -81,13 +110,16 @@
     </div>
 </div>
 
-<ConfirmationModel>
-    <h3 slot="header">Confirm Delete</h3>
-    <div slot="content">
-        <p>
-            Deleting this note will remove all its traced from the system and cannot be rolled back. Do you really wish to delete this note
-        </p>
-        <button on:click|preventDefault={closeDeleteModel}>NO</button>
-        <button on:click|preventDefault={deleteNote}>YES</button>
-    </div>
-</ConfirmationModel>
+{#if showDeleteModelFlag}
+
+    <ConfirmationModel className="delete">
+        <h3 slot="header">{confirmationModelConstants.DELETE_HEADER}</h3>
+        <div slot="content">
+            <p>{confirmationModelConstants.DELETE_CONTENT}</p>
+        </div>
+        <div slot="footer">
+            <Button buttonClass="{buttonConstants.BUTTON_CLASS_NO}" buttonLabel="{buttonConstants.BUTTON_LABEL_NO}" on:no={closeDeleteModel} />
+            <Button buttonClass="{buttonConstants.BUTTON_CLASS_YES}" buttonLabel="{buttonConstants.BUTTON_LABEL_YES}" on:yes={deleteNote} />
+        </div>
+    </ConfirmationModel>
+{/if}

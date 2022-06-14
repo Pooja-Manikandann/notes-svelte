@@ -1,7 +1,14 @@
 <script>
     import ConfirmationModel from "./ConfirmationModel.svelte";
     import validate from "../helpers/validate"
-    import noteStore from "../helpers/noteStore"
+    import Button from "./Button.svelte"
+    import store from "../store/noteStore";
+    import constant from "../constants/constant"
+    import buttonConstants from "../constants/buttonConstants"
+    import confirmationModelConstants from "../constants/confirmationModelConstants"
+    import validationConstants from "../constants/validationConstants"
+
+    export let count;
     
     let openAddModelFlag = false;
     let prevSelector="green";
@@ -21,6 +28,8 @@
         openAddModelFlag = false;
         title="";
         content="";
+        validateResult.title="";
+        validateResult.content=""
         selectedColor="green"
     }
 
@@ -33,16 +42,25 @@
         selectedColor = color;
     }
 
+    function create_UUID(){
+        var dt = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (dt + Math.random()*16)%16 | 0;
+            dt = Math.floor(dt/16);
+            return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    }
+
     function submitNote(){
-        console.log(title)
         if(title.length == 0 ){
             console.log("inside")
-            validateResult.title = "Empty title is not accepted"
+            validateResult.title = validationConstants.EMPTY_TITLE
             return;
         }
         if(content.length == 0){
             validateResult.title = ""
-            validateResult.content = "Empty content is not accepted"
+            validateResult.content = validationConstants.EMPTY_CONTENT
             return;
         }
         let result = validate.validateAddNewNoteForm(title, content)
@@ -52,14 +70,16 @@
         else{
             validateResult.title="";
             validateResult.content=""
-            noteStore.addNote({
+            var date = new Date();
+            date = date.getDate() +" "+constant.MONTH_NAMES[date.getMonth()];
+            store.persistStore('notes',{
+                id: create_UUID(),
                 title:title,
                 content:content,
-                color:selectedColor
+                color:selectedColor,
+                date:date
             })
-            noteStore.getAllNotes();
             closeAddModel();
-
         }
     }
 </script>
@@ -70,13 +90,19 @@
         justify-content: center;
         align-items: center;
         height: 24rem;
-        width: 15.875rem;
         border: 3px dashed #cd8489;
         .add{
             font-size: 7rem;
             color: #9a1e13;
             cursor: pointer;
         }
+    }
+    .five{
+        width: calc((100% - (4*30px))/5);
+    }
+    .two{
+        width: calc((100% - (30px))/2);
+        height: 16rem;
     }
     form{
         input{
@@ -131,13 +157,13 @@
 
 </style>
 
-<div class="add-new-container">
+<div class="add-new-container {count}" >
     
     <ion-icon class="add" name="add-circle" on:click={openAddModel}></ion-icon>
 </div>
 {#if openAddModelFlag}    
-    <ConfirmationModel>
-        <h3 slot="header">NEW NOTE</h3>
+    <ConfirmationModel className="add">
+        <h3 slot="header">{confirmationModelConstants.ADD_HEADER}</h3>
         <form action="" slot="content">
             <input type="text" name="title" id="title" placeholder="Note title" bind:value="{title}">
             <span>{validateResult.title}</span>
@@ -154,8 +180,13 @@
                 </div>
                 
             </div>
-            <button on:click|preventDefault={closeAddModel}>Cancel</button>
-            <button on:click|preventDefault="{submitNote}">Add</button>
+            <div class="buttonContainer">
+                
+            </div>
         </form>
+        <div slot="footer">
+            <Button buttonClass="{buttonConstants.BUTTON_CLASS_NO}" buttonLabel="{buttonConstants.BUTTON_LABEL_CANCEL}" on:no={closeAddModel} />
+            <Button buttonClass="{buttonConstants.BUTTON_CLASS_YES}" buttonLabel="{buttonConstants.BUTTON_LABEL_ADD}" on:yes={submitNote} />
+        </div>
     </ConfirmationModel>
 {/if}

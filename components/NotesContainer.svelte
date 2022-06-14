@@ -1,13 +1,23 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import AddNewNote from "./AddNewNote.svelte";
-    import noteStore from "../helpers/noteStore";
     import Note from "./Note.svelte"
+    import store from "../store/noteStore";
+
+    export let count;
     
     let notes=[];
+    const getStore = store.retrieveStore("notes")
+    let unsubscribe;
 
     onMount(()=>{
-        notes = noteStore.getAllNotes();
+        unsubscribe = getStore.subscribe(value =>{
+            notes = value
+        })
+    })
+
+    onDestroy(()=>{
+        unsubscribe();
     })
 
 </script>
@@ -15,18 +25,24 @@
 <style>
     .notes-container{
         display: flex;
-        gap: 20px;
-        padding: 3rem;
-        border: 1px solid black;
+        flex-wrap: wrap;
+        gap: 30px;
+        padding: 2rem 4rem;
     }
 
     .header{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-size: 1.5rem;
         padding: 0.75rem 0;
     }
 
     .content{
         padding: 0.75rem 0;
+        font-size: 13px;
+        word-spacing: 3px;
+        text-align: justify;
     }
 
     .footer{
@@ -37,10 +53,10 @@
 </style>
 
 <div class="notes-container">
-    <AddNewNote />
+    <AddNewNote count={count} />
 
-    {#each notes as note}
-        <Note color={note.color}>
+    {#each notes as note (note.id)}
+        <Note id={note.id} color={note.color} count={count}>
             
             <div class="header" slot="header">{note.title}</div>
             <div class="content" slot="content">{note.content}</div>

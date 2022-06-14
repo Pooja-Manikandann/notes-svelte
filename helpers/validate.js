@@ -1,26 +1,27 @@
+import validationConstant from "../constants/validationConstants";
+
 const validate = {
     validateAddNewNoteForm :  (title, content) => {
         if(title.length <= 60 && content.length<= 255){
             return true;
         }
         else{
-            console.log(content.length)
             if(content.length > 255 && title.length > 60){
                 return{
-                    title: "Max char exceeded enter within 60",
-                    content: "Max char exceeded enter within 255"
+                    title: validationConstant.MAXLENGTH_TITLE,
+                    content: validationConstant.MAXLENGTH_CONTENT
                 }
             }
             else if(title.length > 60){
                 return{
-                    title: "Max char exceeded enter within 60",
+                    title: validationConstant.MAXLENGTH_TITLE,
                     content: ""
                 }
             }
             else if(content.length > 2550){
                 return{
                     title: "",
-                    content: "Max char exceeded enter within 255"
+                    content: validationConstant.MAXLENGTH_CONTENT
                 }
             }
         }

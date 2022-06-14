@@ -1,11 +1,10 @@
 <script>
-    let columnCount;
-    
-    $: console.log(columnCount)
+    import constant from "../constants/constant";
+
+    export let columnCount = constant.COLUMN_5;
 
     function showDefault(){
-        columnCount = "5";
-        console.log('show default called..')
+        columnCount = constant.COLUMN_5;
     }
 </script>
 
@@ -15,7 +14,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.5rem 3rem;
+        padding: 1.5rem 4rem;
         background-color: #9a1e13;
         color: #fff;
         .title{
@@ -43,12 +42,12 @@
 </style>
 
 <div class="header">
-    <div class="title">POCKET NOTES</div>
+    <div class="title">{constant.APP_TITLE}</div>
     <div class="view-selection-container">
         <p on:click={showDefault}>Default View</p>
         <select name="column" id="" bind:value="{columnCount}">
-            <option value="5" >5 Column format</option>
-            <option value="2">2 Column format</option>
+            <option value="{constant.COLUMN_5}" >5 Column format</option>
+            <option value="{constant.COLUMN_2}">2 Column format</option>
         </select>          
     </div>
 </div>
