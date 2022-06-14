@@ -91,10 +91,11 @@
         align-items: center;
         height: 24rem;
         border: 3px dashed #cd8489;
+        cursor: pointer;
         .add{
             font-size: 7rem;
             color: #9a1e13;
-            cursor: pointer;
+            
         }
     }
     .five{
@@ -157,9 +158,9 @@
 
 </style>
 
-<div class="add-new-container {count}" >
+<div class="add-new-container {count}" on:click={openAddModel} >
     
-    <ion-icon class="add" name="add-circle" on:click={openAddModel}></ion-icon>
+    <ion-icon class="add" name="add-circle"></ion-icon>
 </div>
 {#if openAddModelFlag}    
     <ConfirmationModel className="add">
