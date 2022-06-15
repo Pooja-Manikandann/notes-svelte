@@ -1,5 +1,12 @@
 <script>
     export let className;
+    import { createEventDispatcher } from "svelte/internal";
+
+    let dispatch = createEventDispatcher();
+
+    function closeOverLay(){
+        dispatch('closeOverlay','clicked')
+    }
 
 </script>
 
@@ -58,7 +65,7 @@
 </style>
 
 
-<div class="overlay"></div>
+<div class="overlay" on:click="{closeOverLay}"></div>
 
 <div class="model {className}">
     <div class="header">

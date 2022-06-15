@@ -28,7 +28,6 @@
     }
 
     function deleteNote(){
-        console.log(id)
         store.deleteItem("notes",id);
         showDeleteModelFlag=false
     }
@@ -112,7 +111,7 @@
 
 {#if showDeleteModelFlag}
 
-    <ConfirmationModel className="delete">
+    <ConfirmationModel className="delete" on:closeOverlay={closeDeleteModel}>
         <h3 slot="header">{confirmationModelConstants.DELETE_HEADER}</h3>
         <div slot="content">
             <p>{confirmationModelConstants.DELETE_CONTENT}</p>

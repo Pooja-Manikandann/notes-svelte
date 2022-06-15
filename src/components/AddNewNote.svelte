@@ -18,7 +18,7 @@
     let validateResult={
         title:"",
         content:""
-    };    
+    };
     
     function openAddModel(){
         openAddModelFlag = true;
@@ -34,6 +34,8 @@
     }
 
     function selectColor(color){
+        console.log(prevSelector+' '+color)
+        document.getElementsByClassName("green")[0].childNodes[0].style.display = "none";
         if(prevSelector.length!=0){
             document.getElementsByClassName(prevSelector)[0].childNodes[0].style.display = "none";
         }
@@ -163,7 +165,7 @@
     <ion-icon class="add" name="add-circle"></ion-icon>
 </div>
 {#if openAddModelFlag}    
-    <ConfirmationModel className="add">
+    <ConfirmationModel className="add" on:closeOverlay={closeAddModel}>
         <h3 slot="header">{confirmationModelConstants.ADD_HEADER}</h3>
         <form action="" slot="content">
             <input type="text" name="title" id="title" placeholder="Note title" bind:value="{title}">

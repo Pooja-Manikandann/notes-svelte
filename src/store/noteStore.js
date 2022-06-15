@@ -1,37 +1,32 @@
 import { writable } from 'svelte/store'
 
 const getNotes = (key) => {
-    const persist = JSON.parse(localStorage.getItem(key)) || []
-    const store = writable(persist)
-    var notes;
-    store.subscribe((note)=>{
-        notes = note;
-        return note;
-    })
+    const notes = JSON.parse(localStorage.getItem(key)) || []
     return notes; 
 }
 
-const getStore = (key) => {
-    const persist = JSON.parse(localStorage.getItem(key)) || []
-    return writable(persist)
-}
+
+const persist = JSON.parse(localStorage.getItem("notes")) || []
+const noteStore = writable(persist)
 
 const store = {
     persistStore: (key, currentNote) => {
-        let notes = getNotes(key);
+        let notes = getNotes(key)
         notes = [
             currentNote,
             ...notes
         ]
         localStorage.setItem(key, JSON.stringify(notes))
+        noteStore.set(notes)
     },
     retrieveStore: (key) => {
-        return getStore(key);
+        return noteStore;
     },
     deleteItem: (key,id) => {
         let notes = getNotes(key);
         notes = notes.filter(note => note.id != id)
         localStorage.setItem(key, JSON.stringify(notes))
+        noteStore.set(notes)
     }
 }
 

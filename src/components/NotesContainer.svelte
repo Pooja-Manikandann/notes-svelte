@@ -6,19 +6,7 @@
 
     export let count;
     
-    let notes=[];
     const getStore = store.retrieveStore("notes")
-    let unsubscribe;
-
-    onMount(()=>{
-        unsubscribe = getStore.subscribe(value =>{
-            notes = value
-        })
-    })
-
-    onDestroy(()=>{
-        unsubscribe();
-    })
 
 </script>
 
@@ -55,7 +43,7 @@
 <div class="notes-container">
     <AddNewNote count={count} />
 
-    {#each notes as note (note.id)}
+    {#each $getStore as note (note.id)}
         <Note id={note.id} color={note.color} count={count}>
             
             <div class="header" slot="header">{note.title}</div>
