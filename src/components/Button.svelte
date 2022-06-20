@@ -44,4 +44,4 @@
     }
 </style>
 
-<button on:click|preventDefault={callEvent} class="{buttonClass}">{buttonLabel.toUpperCase()}</button>
+<button on:click class="{buttonClass}">{buttonLabel.toUpperCase()}</button>

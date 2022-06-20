@@ -188,8 +188,8 @@
             </div>
         </form>
         <div slot="footer">
-            <Button buttonClass="{buttonConstants.BUTTON_CLASS_NO}" buttonLabel="{buttonConstants.BUTTON_LABEL_CANCEL}" on:no={closeAddModel} />
-            <Button buttonClass="{buttonConstants.BUTTON_CLASS_YES}" buttonLabel="{buttonConstants.BUTTON_LABEL_ADD}" on:yes={submitNote} />
+            <Button buttonClass="{buttonConstants.BUTTON_CLASS_NO}" buttonLabel="{buttonConstants.BUTTON_LABEL_CANCEL}" on:click={closeAddModel} />
+            <Button buttonClass="{buttonConstants.BUTTON_CLASS_YES}" buttonLabel="{buttonConstants.BUTTON_LABEL_ADD}" on:click={submitNote} />
         </div>
     </ConfirmationModel>
 {/if}

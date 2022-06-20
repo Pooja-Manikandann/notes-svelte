@@ -18,7 +18,7 @@ const validate = {
                     content: ""
                 }
             }
-            else if(content.length > 2550){
+            else if(content.length > 255){
                 return{
                     title: "",
                     content: validationConstant.MAXLENGTH_CONTENT
